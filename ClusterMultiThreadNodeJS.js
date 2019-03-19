@@ -5,12 +5,12 @@ var os = require('os');
 //import the module with the OS avaliable functions
 
 var cpus = os.cpus();
-//console.log(cpus);
 //convert to a variable the information about the CPU
 
 
 if(cluster.isMaster){
   console.log('thread master');
+  console.log(cpus);
 
   cpus.forEach(function(){
       cluster.fork();
