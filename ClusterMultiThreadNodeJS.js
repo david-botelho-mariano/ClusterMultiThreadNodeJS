@@ -1,35 +1,36 @@
 var cluster = require('cluster');
-//import the multi-thread module
+//importar o module de multi-thread
 
 var os = require('os');
-//import the module with the OS avaliable functions
+//import o modulo com as funcoes do sistema operacional
 
 var cpus = os.cpus();
-//convert to a variable the information about the CPU
+//converter para uma variavel as informacoes sobre a CPU
 
-
-if(cluster.isMaster){
+if(cluster.isMaster == true){
   console.log('thread master');
   console.log(cpus);
+  //imprimi os detalhes de todas CPU
 
   cpus.forEach(function(){
       cluster.fork();
   });
-  //use all avaliable CPU(forking the same amount of CPUS)
+  //usar a quantidade total de CPU's disponiveis
 
   cluster.on('listening', function(worker){
     console.log('connected cluster ' + worker.process.pid );
   });
-  //when the cluster connects,show sucess message
+  //quando uma nova thread se conectar,mostre um mensagem de sucesso
 
   cluster.on('exit', worker => {
     console.log('desconnected cluster', worker.process.pid);
     cluster.fork();
   })
-  //reconnect the thread when it dies
+  //quando uma nova thread se desconectar,mostre um mensagem de falha
+  //e recrie novamente essa thread
 
 } else {
   console.log('thread slave');
   require('./mainApplication.js')
-  //change the file name with the one that you want to multi-thread
+  //nome do programa que quero que seja multi-threaded
 }
